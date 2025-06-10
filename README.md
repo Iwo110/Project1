@@ -1,6 +1,6 @@
-# Simple LLM Example
+# Simple Chatbot Example
 
-This project contains a minimal example of loading and fine-tuning a language model using the [HuggingFace Transformers](https://github.com/huggingface/transformers) library.
+This project demonstrates a very small conversational bot built on top of the [HuggingFace Transformers](https://github.com/huggingface/transformers) library. The bot keeps a history of the conversation and can be fine-tuned later on the stored chat logs.
 
 ## Setup
 
@@ -12,16 +12,16 @@ pip install -r requirements.txt
 
 ## Usage
 
-Generate text with a pre-trained model:
+Start an interactive chat session:
 
 ```bash
 python main.py
 ```
 
-Fine-tune the model on custom text data:
+To fine-tune the model on the conversation logs after chatting, run:
 
 ```bash
-python -c "from llm import LLM; model = LLM(); model.fine_tune('sample_data.txt')"
+python -c "from chatbot import ChatBot; bot = ChatBot(); bot.fine_tune_on_logs()"
 ```
 
-The fine-tuned model will be saved in the `finetuned/` directory.
+Fine-tuned models are saved in the `finetuned/` directory.
