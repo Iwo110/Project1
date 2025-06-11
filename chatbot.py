@@ -3,9 +3,10 @@
 import os
 from datetime import datetime
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, Optional
 
 from llm import LLM
+from memory import Memory
 
 class ChatBot:
     """Simple chatbot that keeps conversation history and can fine-tune on logs."""
@@ -16,9 +17,11 @@ class ChatBot:
         *,
         log_dir: str = "logs",
         max_history: int = 10,
+        memory_file: Optional[str] = None,
     ) -> None:
         self.llm = LLM(model_name)
-        self.history: list[str] = []
+        self.memory = Memory(memory_file) if memory_file else None
+        self.history: list[str] = self.memory.load() if self.memory else []
         self.log_dir = Path(log_dir)
         self.log_dir.mkdir(exist_ok=True)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -41,6 +44,10 @@ class ChatBot:
         with open(self.log_path, "a") as f:
             f.write(f"User: {user_input}\nAssistant: {response}\n")
 
+        if self.memory:
+            self.memory.append(f"User: {user_input}")
+            self.memory.append(f"Assistant: {response}")
+
         return response
 
     def fine_tune_on_logs(self):
@@ -57,4 +64,6 @@ class ChatBot:
         self.history = []
         if self.log_path.exists():
             self.log_path.unlink()
+        if self.memory:
+            self.memory.clear()
 

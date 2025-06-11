@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import random
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, Optional
 
 from chatbot import ChatBot
 
@@ -25,10 +25,21 @@ class Brain:
         *,
         log_dir: str = "logs",
         max_history: int = 10,
+        memory_file: Optional[str] = None,
+        mood_file: str = "mood.txt",
     ) -> None:
-        self.chatbot = ChatBot(model_name=model_name, log_dir=log_dir, max_history=max_history)
+        self.chatbot = ChatBot(
+            model_name=model_name, log_dir=log_dir, max_history=max_history, memory_file=memory_file
+        )
+        self.mood_path = Path(mood_file)
+        if self.mood_path.exists():
+            try:
+                self.mood = float(self.mood_path.read_text())
+            except Exception:
+                self.mood = 0.0
+        else:
+            self.mood = 0.0
         # mood is a number in [-1, 1]; positive means happy, negative sad
-        self.mood: float = 0.0
         self.interactions = 0
 
     def _update_mood(self, text: str) -> None:
@@ -36,6 +47,7 @@ class Brain:
         delta = (len(text) % 5 - 2) * 0.1
         # move mood slightly toward delta but keep in [-1, 1]
         self.mood = max(-1.0, min(1.0, self.mood * 0.9 + delta))
+        self.mood_path.write_text(f"{self.mood}")
 
     def talk(self, user_input: str) -> str:
         """Respond to the user and evolve the brain state."""
@@ -57,3 +69,5 @@ class Brain:
         self.chatbot.reset_history()
         self.mood = 0.0
         self.interactions = 0
+        if self.mood_path.exists():
+            self.mood_path.unlink()

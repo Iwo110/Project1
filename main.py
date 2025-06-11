@@ -11,10 +11,15 @@ def main() -> None:
     parser.add_argument(
         "--log-dir", default="logs", help="Directory where chat logs are stored"
     )
+    parser.add_argument(
+        "--memory-file",
+        default=None,
+        help="Optional file to persist conversation history",
+    )
     parser.add_argument("--fine-tune", action="store_true", help="Fine tune on logs and exit")
     args = parser.parse_args()
 
-    bot = ChatBot(model_name=args.model, log_dir=args.log_dir)
+    bot = ChatBot(model_name=args.model, log_dir=args.log_dir, memory_file=args.memory_file)
 
     if args.fine_tune:
         bot.fine_tune_on_logs()
