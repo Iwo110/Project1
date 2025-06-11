@@ -34,3 +34,25 @@ Fine-tuned models are saved in the `finetuned/` directory.
 * `--model` - specify a different model name from HuggingFace.
 * `--log-dir` - directory where chat logs will be written.
 * `--fine-tune` - fine tune the model on all logs then exit.
+
+## Evolving Brain
+
+The `brain.py` module builds on the basic `ChatBot` by adding a minimal "mood"
+state and an evolution routine. Mood shifts slightly based on the text length of
+user messages, and the brain can periodically fine‑tune the underlying model on
+the accumulated logs.
+
+Example usage:
+
+```python
+from brain import Brain
+brain = Brain()
+while True:
+    user = input("You: ")
+    if user == "exit":
+        break
+    reply = brain.talk(user)
+    print("Bot:", reply)
+    brain.evolve(every_n=5)
+```
+
