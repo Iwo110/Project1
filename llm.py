@@ -8,7 +8,6 @@ use it without needing to know the details of the underlying transformers API.
 
 from typing import Optional
 
-import datasets
 import torch
 from transformers import (
     AutoModelForCausalLM,
@@ -61,6 +60,8 @@ class LLM:
         batch_size: int = 1,
     ) -> None:
         """Fine tune the model on a plain text dataset."""
+        import datasets
+
         dataset = datasets.load_dataset("text", data_files={"train": dataset_path})
         tokenized = dataset.map(
             lambda e: self.tokenizer(e["text"], truncation=True), batched=True
