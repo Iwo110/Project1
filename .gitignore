@@ -2,3 +2,4 @@ __pycache__/
 chat_logs.txt
 logs/
 finetuned/
+demo_memory.*
