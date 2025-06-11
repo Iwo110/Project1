@@ -9,7 +9,7 @@ from effector import TextOutput
 
 def main() -> None:
     input_module = TextInput()
-    core = CognitiveCore()
+    core = CognitiveCore(vector_memory_path="demo_memory")
     emotion = EmotionState()
     planner = Planner()
     output = TextOutput()

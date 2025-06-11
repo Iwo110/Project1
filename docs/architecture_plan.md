@@ -26,8 +26,12 @@ The system will start with a simple personality defined by prompts.
 Future work includes adding an emotion state vector that influences wording.
 
 ## 1.4 Memory Mechanism
-A persistent memory component will store conversation summaries.
-In later phases this will evolve into retrieval-augmented generation.
+A vector database backed by FAISS enables semantic search over past
+interactions. Conversation lines are embedded using a sentence
+transformer model and stored with their embeddings. The cognitive layer
+queries this memory for related context prior to generating each
+response. This design supports sophisticated retrieval-augmented prompts
+even in the initial phase.
 
 ## 1.5 Multimodal Considerations
 Initial implementation focuses on text.
