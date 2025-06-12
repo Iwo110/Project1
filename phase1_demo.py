@@ -1,6 +1,7 @@
 """Demonstration of the Phase 1 architecture skeleton."""
 
 from perception import TextInput, VisionAnalyzer
+from moderation import SafetyChecker
 from cognitive import CognitiveCore
 from emotion import EmotionState
 from planning import Planner
@@ -17,6 +18,7 @@ def main() -> None:
     emotion = EmotionState(mood_file="demo_mood.txt")
     planner = Planner()
     output = TextOutput()
+    checker = SafetyChecker()
     summarizer: Summarizer | None = None
     history: list[str] = []
     if core.memory:
@@ -40,6 +42,8 @@ def main() -> None:
                     f"The user shows an image: {description}\nAssistant:",
                     emotion=emotion.describe(),
                 )
+                if checker.is_toxic(response):
+                    response = "Przepraszam, ale wolałbym nie odpowiadać."
                 history.extend([f"Image: {description}", f"Assistant: {response}"])
                 core.remember([f"Image: {description}", f"Assistant: {response}"])
                 output.speak(response)
@@ -57,6 +61,8 @@ def main() -> None:
         response = core.generate(
             f"User: {intent}\nAssistant:", emotion=emotion.describe()
         )
+        if checker.is_toxic(response):
+            response = "Przepraszam, ale nie mogę tego powiedzieć."
         history.extend([f"User: {text}", f"Assistant: {response}"])
         core.remember([f"User: {text}", f"Assistant: {response}"])
         output.speak(response)
