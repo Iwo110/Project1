@@ -5,7 +5,6 @@ from cognitive import CognitiveCore
 from emotion import EmotionState
 from planning import Planner
 from effector import SpeechSynthesizer
-from moderation import SafetyChecker
 
 
 def main() -> None:
@@ -16,7 +15,6 @@ def main() -> None:
     emotion = EmotionState(mood_file="voice_mood.txt")
     planner = Planner()
     speaker = SpeechSynthesizer()
-    checker = SafetyChecker()
     if core.memory:
         history = core.memory.load()
         if core.vector_memory and not core.vector_memory.index_path.exists():
@@ -35,8 +33,6 @@ def main() -> None:
             response = core.generate(
                 f"User: {intent}\nAssistant:", emotion=emotion.describe()
             )
-            if checker.is_toxic(response):
-                response = "Przepraszam, ale wolę nie mówić na ten temat."
             core.remember([f"User: {text}", f"Assistant: {response}"])
             speaker.say(response)
     except KeyboardInterrupt:

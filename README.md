@@ -75,8 +75,7 @@ so subsequent sessions continue from the same emotional state. Conversation
 history is written to `demo_history.txt` and indexed with FAISS so the bot can
 remember earlier discussions across runs. Retrieved lines are selected using
 Maximal Marginal Relevance and then re-ranked with a cross-encoder for
-improved precision. A safety checker filters toxic replies before they are
-shown to the user. An advanced zero-shot classifier infers the user's intent
+improved precision. An advanced zero-shot classifier infers the user's intent
 before each response.
 
 ## Voice Demo
