@@ -39,9 +39,9 @@ Fine-tuned models are saved in the `finetuned/` directory.
 ## Evolving Brain
 
 The `brain.py` module builds on the basic `ChatBot` by adding a minimal "mood"
-state and an evolution routine. Mood shifts slightly based on the text length of
-user messages, and the brain can periodically fine‑tune the underlying model on
-the accumulated logs.
+state and an evolution routine. Mood now responds to the sentiment of each user
+message using a HuggingFace sentiment‑analysis model, and the brain can
+periodically fine‑tune the underlying model on the accumulated logs.
 
 The brain persists its mood to `mood.txt` so emotional state is remembered
 between sessions. When a memory file is provided, past conversation lines are
@@ -66,10 +66,10 @@ while True:
 The script `phase1_demo.py` demonstrates the modular design with vector memory
 and a lightweight text summarizer. Launch it and converse with the bot; use the
 command `summary` at any time to see a recap of the dialogue. The summarizer
-loads its model only on demand so startup remains fast. The bot's current mood
-is included in prompts so responses subtly reflect its emotional state. Mood is
-stored in `demo_mood.txt` so subsequent sessions continue from the same
-emotional state.
+loads its model only on demand so startup remains fast. The bot's current mood,
+inferred from sentiment analysis of your messages, is included in prompts so
+responses subtly reflect its emotional state. Mood is stored in `demo_mood.txt`
+so subsequent sessions continue from the same emotional state.
 
 ## Voice Demo
 

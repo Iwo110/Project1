@@ -3,6 +3,8 @@
 from dataclasses import dataclass
 from pathlib import Path
 
+from typing import Any
+
 
 @dataclass
 class EmotionState:
@@ -19,9 +21,23 @@ class EmotionState:
             except Exception:
                 self.mood = 0.0
 
+    _sentiment: Any | None = None
+
+    def _analyze(self, text: str) -> float:
+        """Return sentiment score in range [-1, 1]."""
+        if self._sentiment is None:
+            from transformers import pipeline
+
+            self._sentiment = pipeline("sentiment-analysis")
+        result = self._sentiment(text[:512])[0]
+        score = result["score"]
+        if result["label"].upper().startswith("NEG"):
+            score = -score
+        return float(score)
+
     def update(self, user_text: str) -> None:
-        delta = (len(user_text) % 5 - 2) * 0.1
-        self.mood = max(-1.0, min(1.0, self.mood * 0.9 + delta))
+        score = self._analyze(user_text)
+        self.mood = max(-1.0, min(1.0, self.mood * 0.8 + score * 0.5))
         self._path.write_text(f"{self.mood}")
 
     def describe(self) -> str:
