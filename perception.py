@@ -47,5 +47,17 @@ class SpeechRecognizer:
             return ""
 
 class VisionAnalyzer:
-    def describe(self, image_bytes: bytes) -> str:
-        raise NotImplementedError
+    """Generate captions for images using a pre-trained transformer."""
+
+    def __init__(self, model_name: str = "nlpconnect/vit-gpt2-image-captioning") -> None:
+        self.model_name = model_name
+        self.pipe = None
+
+    def describe(self, image_path: str) -> str:
+        """Return a textual description of the provided image file."""
+        if self.pipe is None:
+            from transformers import pipeline
+
+            self.pipe = pipeline("image-to-text", model=self.model_name)
+        result = self.pipe(image_path)[0]["generated_text"]
+        return result

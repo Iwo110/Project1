@@ -1,6 +1,6 @@
 """Demonstration of the Phase 1 architecture skeleton."""
 
-from perception import TextInput
+from perception import TextInput, VisionAnalyzer
 from cognitive import CognitiveCore
 from emotion import EmotionState
 from planning import Planner
@@ -10,6 +10,7 @@ from summarizer import Summarizer
 
 def main() -> None:
     input_module = TextInput()
+    vision = VisionAnalyzer()
     core = CognitiveCore(
         vector_memory_path="demo_memory", memory_file="demo_history.txt"
     )
@@ -29,6 +30,22 @@ def main() -> None:
         text = input_module.receive()
         if text.lower() == "exit":
             break
+        if text.startswith("look "):
+            img_path = text.split(" ", 1)[1]
+            try:
+                description = vision.describe(img_path)
+                print(f"Image description: {description}")
+                emotion.update(description)
+                response = core.generate(
+                    f"The user shows an image: {description}\nAssistant:",
+                    emotion=emotion.describe(),
+                )
+                history.extend([f"Image: {description}", f"Assistant: {response}"])
+                core.remember([f"Image: {description}", f"Assistant: {response}"])
+                output.speak(response)
+            except Exception as exc:
+                output.speak(f"Could not analyze image: {exc}")
+            continue
         if text.lower() == "summary":
             if summarizer is None:
                 summarizer = Summarizer()
