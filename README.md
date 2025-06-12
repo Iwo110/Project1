@@ -65,8 +65,9 @@ while True:
 
 The script `phase1_demo.py` demonstrates the modular design with vector memory
 and a lightweight text summarizer. Launch it and converse with the bot; use the
-command `summary` at any time to see a recap of the dialogue. The bot's current
-mood is included in prompts so responses subtly reflect its emotional state.
+command `summary` at any time to see a recap of the dialogue. The summarizer
+loads its model only on demand so startup remains fast. The bot's current mood
+is included in prompts so responses subtly reflect its emotional state.
 
 
 ## Wprowadzenie i cele projektu

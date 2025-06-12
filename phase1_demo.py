@@ -14,7 +14,7 @@ def main() -> None:
     emotion = EmotionState()
     planner = Planner()
     output = TextOutput()
-    summarizer = Summarizer()
+    summarizer: Summarizer | None = None
     history: list[str] = []
 
     print("Phase 1 demo. Type 'exit' to quit.")
@@ -23,6 +23,8 @@ def main() -> None:
         if text.lower() == "exit":
             break
         if text.lower() == "summary":
+            if summarizer is None:
+                summarizer = Summarizer()
             summary = summarizer.summarize(history)
             output.speak(f"Summary: {summary}")
             continue
