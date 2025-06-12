@@ -73,7 +73,9 @@ inferred from sentiment analysis of your messages, is included in prompts so
 responses subtly reflect its emotional state. Mood is stored in `demo_mood.txt`
 so subsequent sessions continue from the same emotional state. Conversation
 history is written to `demo_history.txt` and indexed with FAISS so the bot can
-remember earlier discussions across runs.
+remember earlier discussions across runs. Retrieved lines are selected using
+Maximal Marginal Relevance to provide diverse yet relevant context. An advanced
+zero-shot classifier infers the user's intent before each response.
 
 ## Voice Demo
 
