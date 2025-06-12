@@ -69,13 +69,17 @@ command `summary` at any time to see a recap of the dialogue. The summarizer
 loads its model only on demand so startup remains fast. The bot's current mood,
 inferred from sentiment analysis of your messages, is included in prompts so
 responses subtly reflect its emotional state. Mood is stored in `demo_mood.txt`
-so subsequent sessions continue from the same emotional state.
+so subsequent sessions continue from the same emotional state. Conversation
+history is written to `demo_history.txt` and indexed with FAISS so the bot can
+remember earlier discussions across runs.
 
 ## Voice Demo
 
 The `voice_demo.py` script expands on the Phase 1 demo by enabling speech input
 and spoken responses via ``speech_recognition`` and ``pyttsx3``. Launch it to
-talk with the bot using a microphone and hear its replies aloud.
+talk with the bot using a microphone and hear its replies aloud. Conversation
+history is kept in `voice_history.txt` so memories can carry over between
+sessions.
 
 
 ## Wprowadzenie i cele projektu

@@ -10,12 +10,19 @@ from summarizer import Summarizer
 
 def main() -> None:
     input_module = TextInput()
-    core = CognitiveCore(vector_memory_path="demo_memory")
+    core = CognitiveCore(
+        vector_memory_path="demo_memory", memory_file="demo_history.txt"
+    )
     emotion = EmotionState(mood_file="demo_mood.txt")
     planner = Planner()
     output = TextOutput()
     summarizer: Summarizer | None = None
     history: list[str] = []
+    if core.memory:
+        history.extend(core.memory.load())
+        if core.vector_memory and not core.vector_memory.index_path.exists():
+            for line in history:
+                core.vector_memory.add(line)
 
     print("Phase 1 demo. Type 'exit' to quit.")
     while True:

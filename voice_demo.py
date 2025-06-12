@@ -9,10 +9,17 @@ from effector import SpeechSynthesizer
 
 def main() -> None:
     recognizer = SpeechRecognizer()
-    core = CognitiveCore(vector_memory_path="voice_memory")
+    core = CognitiveCore(
+        vector_memory_path="voice_memory", memory_file="voice_history.txt"
+    )
     emotion = EmotionState(mood_file="voice_mood.txt")
     planner = Planner()
     speaker = SpeechSynthesizer()
+    if core.memory:
+        history = core.memory.load()
+        if core.vector_memory and not core.vector_memory.index_path.exists():
+            for line in history:
+                core.vector_memory.add(line)
 
     print("Voice demo. Say something or press Ctrl+C to exit.")
     try:
