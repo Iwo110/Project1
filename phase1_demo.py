@@ -11,7 +11,7 @@ from summarizer import Summarizer
 def main() -> None:
     input_module = TextInput()
     core = CognitiveCore(vector_memory_path="demo_memory")
-    emotion = EmotionState()
+    emotion = EmotionState(mood_file="demo_mood.txt")
     planner = Planner()
     output = TextOutput()
     summarizer: Summarizer | None = None
