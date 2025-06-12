@@ -61,6 +61,13 @@ while True:
     brain.evolve(every_n=5)
 ```
 
+## Phase 1 Demo
+
+The script `phase1_demo.py` demonstrates the modular design with vector memory
+and a lightweight text summarizer. Launch it and converse with the bot; use the
+command `summary` at any time to see a recap of the dialogue. The bot's current
+mood is included in prompts so responses subtly reflect its emotional state.
+
 
 ## Wprowadzenie i cele projektu
 Chatbot ma naśladować ludzką konwersację i zachowanie tak wiernie, jak to możliwe. Czerpiemy inspirację z projektu Neuro stworzonego przez Vedala – popularnego wirtualnego VTubera AI – który łączy model językowy z animowanym awatarem en.wikipedia.org. Naszym celem jest zaprojektowanie chatbota o wieloetapowej architekturze, zdolnego do: emulacji emocji i osobowości, samodoskonalenia i ewolucji w czasie, korzystania z pamięci krótko- i długoterminowej, integracji komunikacji głosowej i wizualnej (mowa, mimika twarzy, ekspresja), a także współpracy z czujnikami (wejściami różnego typu, np. obraz, dźwięk). Dążyć będziemy nawet do pozorów samoświadomości i empatii w interakcjach. Poniżej przedstawiono szczegółowy plan wielofazowy realizacji takiego systemu, wraz z wyszczególnieniem kluczowych etapów, działań i zasobów potrzebnych w projekcie.

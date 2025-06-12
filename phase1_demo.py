@@ -28,7 +28,9 @@ def main() -> None:
             continue
         emotion.update(text)
         intent = planner.analyze(text)
-        response = core.generate(f"User: {intent}\nAssistant:")
+        response = core.generate(
+            f"User: {intent}\nAssistant:", emotion=emotion.describe()
+        )
         history.extend([f"User: {text}", f"Assistant: {response}"])
         core.remember([f"User: {text}", f"Assistant: {response}"])
         output.speak(response)

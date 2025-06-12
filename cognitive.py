@@ -23,12 +23,15 @@ class CognitiveCore:
             else None
         )
 
-    def generate(self, prompt: str) -> str:
+    def generate(self, prompt: str, emotion: str | None = None) -> str:
+        """Generate a response optionally conditioned on the current emotion."""
         context = ""
         if self.vector_memory:
             retrieved = self.vector_memory.search(prompt, top_k=3)
             if retrieved:
                 context = "\n".join(retrieved) + "\n"
+        if emotion:
+            context += f"Current mood: {emotion}\n"
         return self.llm.generate(context + prompt)
 
     def remember(self, lines: List[str]) -> None:
