@@ -8,16 +8,23 @@ from typing import List
 import numpy as np
 
 import faiss
-from sentence_transformers import SentenceTransformer
+from sentence_transformers import SentenceTransformer, CrossEncoder
 
 
 class VectorMemory:
     """Store textual memories and retrieve them by semantic similarity."""
 
-    def __init__(self, path: str = "vec_memory") -> None:
+    def __init__(
+        self,
+        path: str = "vec_memory",
+        *,
+        cross_encoder_model: str | None = "cross-encoder/ms-marco-MiniLM-L-6-v2",
+    ) -> None:
         self.index_path = Path(path).with_suffix(".index")
         self.text_path = Path(path).with_suffix(".txt")
         self.model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+        self.cross_encoder_model = cross_encoder_model
+        self.cross_encoder: CrossEncoder | None = None
         dim = self.model.get_sentence_embedding_dimension()
         self.embeddings: list[np.ndarray] = []
         if self.index_path.exists():
@@ -28,6 +35,10 @@ class VectorMemory:
         else:
             self.index = faiss.IndexFlatIP(dim)
             self.texts = []
+
+    def _ensure_cross_encoder(self) -> None:
+        if self.cross_encoder_model and self.cross_encoder is None:
+            self.cross_encoder = CrossEncoder(self.cross_encoder_model)
 
     def add(self, text: str) -> None:
         emb = self.model.encode([text], convert_to_numpy=True)
@@ -43,9 +54,14 @@ class VectorMemory:
         if not self.texts:
             return []
         q_emb = self.model.encode([query], convert_to_numpy=True)[0]
-        n_candidates = min(top_k * 5, len(self.texts))
+        n_candidates = min(top_k * 10, len(self.texts))
         scores, indices = self.index.search(q_emb.reshape(1, -1), n_candidates)
         cand_indices = [i for i in indices[0] if i != -1]
+        self._ensure_cross_encoder()
+        if self.cross_encoder:
+            cand_texts = [self.texts[i] for i in cand_indices]
+            ce_scores = self.cross_encoder.predict([[query, t] for t in cand_texts])
+            cand_indices = [idx for idx, _ in sorted(zip(cand_indices, ce_scores), key=lambda p: p[1], reverse=True)]
         selected: list[int] = []
         while len(selected) < top_k and cand_indices:
             best_idx = None
