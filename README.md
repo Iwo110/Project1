@@ -71,6 +71,12 @@ is included in prompts so responses subtly reflect its emotional state. Mood is
 stored in `demo_mood.txt` so subsequent sessions continue from the same
 emotional state.
 
+## Voice Demo
+
+The `voice_demo.py` script expands on the Phase 1 demo by enabling speech input
+and spoken responses via ``speech_recognition`` and ``pyttsx3``. Launch it to
+talk with the bot using a microphone and hear its replies aloud.
+
 
 ## Wprowadzenie i cele projektu
 Chatbot ma naśladować ludzką konwersację i zachowanie tak wiernie, jak to możliwe. Czerpiemy inspirację z projektu Neuro stworzonego przez Vedala – popularnego wirtualnego VTubera AI – który łączy model językowy z animowanym awatarem en.wikipedia.org. Naszym celem jest zaprojektowanie chatbota o wieloetapowej architekturze, zdolnego do: emulacji emocji i osobowości, samodoskonalenia i ewolucji w czasie, korzystania z pamięci krótko- i długoterminowej, integracji komunikacji głosowej i wizualnej (mowa, mimika twarzy, ekspresja), a także współpracy z czujnikami (wejściami różnego typu, np. obraz, dźwięk). Dążyć będziemy nawet do pozorów samoświadomości i empatii w interakcjach. Poniżej przedstawiono szczegółowy plan wielofazowy realizacji takiego systemu, wraz z wyszczególnieniem kluczowych etapów, działań i zasobów potrzebnych w projekcie.
