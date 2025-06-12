@@ -2,3 +2,9 @@ __pycache__/
 chat_logs.txt
 logs/
 finetuned/
+demo_memory.*
+voice_memory.*
+demo_mood.txt
+voice_mood.txt
+demo_history.txt
+voice_history.txt
